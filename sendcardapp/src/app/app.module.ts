@@ -1,23 +1,33 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { Component, NgModule, VERSION, Input, Output, EventEmitter } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
-import { BirthdayReminderComponent } from './page-components/birthday-reminder/birthday-reminder.component';
+// import { Reminder } from './page-components/reminder/reminder.component';
 import { ContactComponent } from './page-components/contact/contact.component';
-
+import { DashboardComponent } from './page-components/dashboard.component';
+import { BirthdayReminderService } from './page-components/birthday-reminder.service';
+import { ReminderFormComponent } from './page-components/reminder/reminder-form.component';
+import { ReminderComponent } from './page-components/reminder/reminder';
+import { ReminderListComponent } from './page-components/reminder/reminderList';
+import {AppRoutingModule} from "./app.routing.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    BirthdayReminderComponent,
-    ContactComponent
+    // Reminder,
+    ContactComponent,
+    DashboardComponent,
+    ReminderFormComponent,
+    ReminderComponent,
+    ReminderListComponent,
   ],
   imports: [
     BrowserModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    AppRoutingModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [ BirthdayReminderService ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

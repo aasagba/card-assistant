@@ -1,0 +1,8 @@
+<h3>Up Coming Birthdays</h3>
+<div class="grid grid-pad">
+  <a *ngFor="let reminder of reminders"  [routerLink]="['/detail', reminder.id]"  class="col-1-4">
+    <div class="module hero">
+      <h4>{{reminder.firstname}}</h4>
+    </div>
+  </a>
+</div>

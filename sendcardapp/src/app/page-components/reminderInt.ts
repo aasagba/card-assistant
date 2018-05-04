@@ -2,7 +2,7 @@ export interface ReminderInt {
   id: number;
   firstname: string;
   surname: string;
-  dob: Date;
+  dob: string;
   email: string;
   greeting: string;
   gender: string;

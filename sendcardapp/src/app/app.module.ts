@@ -1,5 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { Component, NgModule, VERSION, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  NgModule,
+  VERSION,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
@@ -10,7 +18,7 @@ import { BirthdayReminderService } from './page-components/birthday-reminder.ser
 import { ReminderFormComponent } from './page-components/reminder/reminder-form.component';
 import { ReminderComponent } from './page-components/reminder/reminder';
 import { ReminderListComponent } from './page-components/reminder/reminderList';
-import {AppRoutingModule} from "./app.routing.module";
+import { AppRoutingModule } from './app.routing.module';
 
 @NgModule({
   declarations: [
@@ -22,12 +30,8 @@ import {AppRoutingModule} from "./app.routing.module";
     ReminderComponent,
     ReminderListComponent,
   ],
-  imports: [
-    BrowserModule,
-    NgbModule.forRoot(),
-    AppRoutingModule,
-  ],
-  providers: [ BirthdayReminderService ],
-  bootstrap: [ AppComponent ]
+  imports: [BrowserModule, NgbModule.forRoot(), AppRoutingModule, FormsModule],
+  providers: [BirthdayReminderService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

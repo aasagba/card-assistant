@@ -9,10 +9,10 @@ export class BirthdayReminderService {
   }
 
   getReminder(id: number): Promise<ReminderInt> {
-    return this.getReminders()
-      .then(reminders =>
-        reminders.find((reminder) => {
-          return reminder.id === id
-        }));
+    return this.getReminders().then(reminders =>
+      reminders.find(reminder => {
+        return reminder.id === id;
+      }),
+    );
   }
 }

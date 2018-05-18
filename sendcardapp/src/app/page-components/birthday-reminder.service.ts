@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class BirthdayReminderService {
+
   getReminders(): Promise<ReminderInt[]> {
     return Promise.resolve(Reminders);
   }
@@ -15,4 +16,19 @@ export class BirthdayReminderService {
       }),
     );
   }
+
+  // check if contacts birthday
+  filterBirthdayContacts(contacts :ReminderInt[]): ReminderInt[] {
+    return contacts.filter(contact => {
+      console.log('contact: ' + contact.dob.substr(0,5) + ' today: ' + this.getTodaysDate().substr(5,5));
+      return contact.dob.substr(0,5) === this.getTodaysDate().substr(5,5);
+    });
+  }
+
+  getTodaysDate(): string {
+    const rightNow = new Date();
+    return rightNow.toISOString().slice(0,10).replace(/-/g,"/");
+  }
+
+  // send ecard
 }

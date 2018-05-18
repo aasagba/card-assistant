@@ -5,7 +5,7 @@ let Reminders: ReminderInt[] = [
     id: 1,
     firstname: 'Jane',
     surname: 'Bloggs',
-    dob: '01/01/1984',
+    dob: '05/06/1984',
     email: 'j.bloggs@gmail.com',
     greeting: 'Happy Birthday!',
     gender: 'Female',

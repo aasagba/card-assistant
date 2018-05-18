@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { Reminder } from './reminder.component';
 import Reminders from '../mock-reminders';
 import { ReminderInt } from '../reminderInt';
+import { BirthdaysComponent } from "../birthdays/birthdays.component";
 
 @Component({
   selector: 'reminder-list',
   template: `
 <reminder-form (reminderCreated)="addReminder($event)" [reminder]="reminder"></reminder-form>
+<birthdays></birthdays>
 <reminder *ngFor="let j of reminders" [reminder]="j" (reminderDeleted)="deleteReminder($event)" (reminderEdited)="editReminder($event)"></reminder>
   `,
 })

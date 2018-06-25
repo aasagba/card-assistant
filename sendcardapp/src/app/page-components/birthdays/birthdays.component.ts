@@ -16,10 +16,10 @@ export class BirthdaysComponent implements OnInit {
     this.birthdayReminderService
       .getReminders()
       .then(reminders => {
-        console.log(reminders.length);
+        console.log('birthday component reminders:', reminders.length);
         this.reminders = this.birthdayReminderService
         .filterBirthdayContacts(reminders);
-        console.log(this.reminders);
+        console.log('birthday component reminder: ', this.reminders);
       });
   }
 

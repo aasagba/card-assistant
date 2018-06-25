@@ -1,25 +1,25 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormControl, Validators} from "@angular/forms";
+import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
+import {FormGroup, Validators, FormBuilder} from "@angular/forms";
 import { Reminder } from './reminder.component';
+import { ReminderFacade } from '../reminder/current-reminder.facade';
 
 @Component({
   selector: 'reminder-form',
   template: `
-    {{this.addReminderForm.valid}}
     <div class="card-text">
-    <form class="form" [formGroup]="addReminderForm" (ngSubmit)="onSubmit()" [hidden]="submitted">
+    <form class="form" [formGroup]="addReminderForm" (ngSubmit)="onSubmit(addReminderForm)">
       <section class="form-block">
         <h4 class="card-title">Create Reminder</h4>
         <div class="form-group">
           <label for="empFullName" class="required">Firstname</label>
-          <label for="firstName"
+          <label for="firstname"
                  aria-haspopup="true"
                  role="tooltip"
                  class=""
-                 [class.invalid]="addReminderForm.get('firstName').invalid && (addReminderForm.get('firstName').dirty || addReminderForm.get('firstName').touched)">
+                 [class.invalid]="addReminderForm.get('firstname').invalid && (addReminderForm.get('firstname').dirty || addReminderForm.get('firstname').touched)">
             <input type="text"
                    class="form-control"
-                   formControlName="firstName"
+                   formControlName="firstname"
                    placeholder="Firstname"
                    #firstname>
             <span class="tooltip-content">
@@ -30,14 +30,14 @@ import { Reminder } from './reminder.component';
         <!-- tooltip tooltip-validation tooltip-md tooltip-bottom-right -->
         <div class="form-group">
           <label for="surnName" class="required">Surname</label>
-          <label for="surnName"
+          <label for="surnname"
                  aria-haspopup="true"
                  role="tooltip"
                  class=""
-                 [class.invalid]="addReminderForm.get('surName').invalid && (addReminderForm.get('surName').dirty || addReminderForm.get('surName').touched)">
+                 [class.invalid]="addReminderForm.get('surname').invalid && (addReminderForm.get('surname').dirty || addReminderForm.get('surname').touched)">
           <input type="text"
              class="form-control"
-                 formControlName="surName"
+                 formControlName="surname"
              placeholder="Surname" 
              #surname>
             <span class="tooltip-content">
@@ -128,32 +128,57 @@ import { Reminder } from './reminder.component';
     </div>
   `,
 })
-export class ReminderFormComponent {
-  @Input('reminder') data: Reminder;
+export class ReminderFormComponent implements OnInit {
   @Output() reminderCreated = new EventEmitter<Reminder>();
+  public user: Reminder;
+  addReminderForm: FormGroup;
 
-  addReminderForm = new FormGroup({
-    firstName: new FormControl('', Validators.required),
-    surName: new FormControl('', Validators.required),
-    dob: new FormControl('', Validators.required),
-    email: new FormControl('', Validators.required),
-    greeting: new FormControl('', Validators.required),
-    gender: new FormControl('', Validators.required),
-  });
-  submitted = false;
+  constructor(
+    public fb: FormBuilder,
+    private reminderFacade: ReminderFacade
+  ) {}
 
-  onSubmit() {
+  ngOnInit() {
+    this.reminderFacade.getCurrentReminder().subscribe((user: Reminder) => {
+      this.user = user;
+    });
 
-    console.log(this.addReminderForm.get('surName').invalid && (this.addReminderForm.get('surName').dirty || this.addReminderForm.get('surName').touched));
-    console.log(this.addReminderForm);
-    const firstName = this.addReminderForm.get('firstName').value;
-    const surName = this.addReminderForm.get('surName').value;
+    this.addReminderForm = this.fb.group({
+      firstname: ['', Validators.required],
+      surname: ['', Validators.required],
+      dob: ['', Validators.required],
+      email: ['', Validators.required],
+      greeting: ['', Validators.required],
+      gender: ['', Validators.required]
+    });
+
+    this.setupForm();
+  }
+
+  setupForm() {
+    this.reminderFacade.$current
+      .subscribe((reminder: Reminder) => {
+        console.log("update form");
+        if (reminder) {
+          this.addReminderForm.patchValue(reminder);
+        }
+      });
+  }
+
+  onSubmit({ value, valid }) {
+
+    // console.log('', this.addReminderForm.get('surName').invalid && (this.addReminderForm.get('surName').dirty || this.addReminderForm.get('surName').touched));
+    // console.log(this.addReminderForm);
+    const id = this.user ? this.user.id : Math.random();
+    const firstName = this.addReminderForm.get('firstname').value;
+    const surName = this.addReminderForm.get('surname').value;
     const dob = this.addReminderForm.get('dob').value;
     const email = this.addReminderForm.get('email').value;
     const greeting = this.addReminderForm.get('greeting').value;
     const gender = this.addReminderForm.get('gender').value;
 
-    this.createReminder(this.data.id, firstName, surName, dob, email, greeting, gender);
+    this.createReminder(id, firstName, surName, dob, email, greeting, gender);
+    // this.reminderFacade.$current.unsubscribe();
   }
 
   createReminder(
@@ -167,6 +192,7 @@ export class ReminderFormComponent {
   ) {
     console.log(
       'reminderFormComponent: ',
+      id,
       firstname,
       surname,
       dob,
@@ -175,18 +201,9 @@ export class ReminderFormComponent {
       gender,
     );
     this.reminderCreated.emit(
-      new Reminder(id | Math.random(), firstname, surname, dob, email, greeting, gender),
+      new Reminder(id, firstname, surname, dob, email, greeting, gender),
     );
-    this.resetForm();
-  }
 
-  resetForm() {
-    this.data.id = null;
-    this.data.firstname = '';
-    this.data.surname = '';
-    this.data.dob = '';
-    this.data.email = '';
-    this.data.greeting = '';
-    this.data.gender = '';
+    this.addReminderForm.reset();
   }
 }

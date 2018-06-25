@@ -2,6 +2,7 @@ import {Injectable, OnInit} from "@angular/core";
 import {Reminder} from "./reminder.component";
 import {BehaviorSubject, Subject} from "rxjs/Rx";
 import Reminders from "../mock-reminders";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class ReminderFacade implements OnInit{
@@ -11,7 +12,7 @@ export class ReminderFacade implements OnInit{
 
   constructor() {
     this.$reminderList = new BehaviorSubject<Array<Reminder>>(Reminders);
-    console.log(Reminders.length);
+    console.log('facade constructor reminders: ', Reminders.length);
   }
 
   ngOnInit() {
@@ -20,6 +21,12 @@ export class ReminderFacade implements OnInit{
 
   public updateCurrentReminder(newReminder: Reminder): void {
     this.$current.next(newReminder);
+    console.log("updateCurrentReminder: ", newReminder);
+  }
+
+  public getCurrentReminder(): Observable<Reminder> {
+    console.log("getCurrentReminder: ", this.$current);
+    return this.$current;
   }
 
   public updateReminderList(newReminder: Reminder): void {
@@ -31,17 +38,19 @@ export class ReminderFacade implements OnInit{
   }
 
   public editReminderList(reminders: Reminder[]):void {
+    console.log(reminders);
     this.$reminderList.next(reminders);
 }
 
-  public getReminderList(): Array<Reminder> {
+  public getReminderList(): Observable<Array<Reminder>> {
 
     // this.$reminderList
     //   .subscribe((remindersList: Array<Reminder>) => {
     //     reminders = remindersList;
     //   });
 
-    return this.$reminderList.getValue();
+    // return this.$reminderList.getValue();
+    return this.$reminderList;
   }
 
 }

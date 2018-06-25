@@ -1,35 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Reminder } from './reminder.component';
-import Reminders from '../mock-reminders';
 import { ReminderInt } from '../reminderInt';
-import { BirthdaysComponent } from "../birthdays/birthdays.component";
+import { ReminderFacade } from '../reminder/current-reminder.facade';
 
 @Component({
   selector: 'reminder-list',
   template: `
-<reminder-form (reminderCreated)="addReminder($event)" [reminder]="reminder"></reminder-form>
+<reminder-form (reminderCreated)="addReminder($event)"></reminder-form>
 <birthdays></birthdays>
 <reminder *ngFor="let j of reminders" [reminder]="j" (reminderDeleted)="deleteReminder($event)" (reminderEdited)="editReminder($event)"></reminder>
   `,
 })
-export class ReminderListComponent {
+export class ReminderListComponent implements OnInit {
   reminders: ReminderInt[];
   reminder: Reminder;
 
-  constructor() {
-    this.resetForm();
-  }
+  constructor(
+    private reminderFacade: ReminderFacade
+  ) {}
 
   ngOnInit(): void {
-    this.reminders = Reminders;
+    // this.reminders = this.reminderFacade.getReminderList();
+    this.reminderFacade.getReminderList().subscribe((users: Array<Reminder>) => {
+      this.reminders = users;
+    });
   }
 
   addReminder(newReminder): void {
     // if existing edit
     let isNew = true;
-    console.log('addReminder: ', newReminder.firstname);
+    let remindersList: Reminder[] = this.reminders;
 
-    this.reminders = this.reminders.map((reminder) => {
+    console.log('addReminder: ', newReminder);
+    console.log("facade remindersList: ", remindersList.length);
+    console.log(remindersList);
+
+    this.reminders = remindersList.map((reminder) => {
       if (reminder.id === newReminder.id) {
         alert('Edit: ' + newReminder.id);
         isNew = false;
@@ -44,16 +50,16 @@ export class ReminderListComponent {
 
     if (isNew) {
       // if new add
-      this.reminders.unshift(newReminder);
+      // this.reminders.unshift(newReminder);
+      this.reminderFacade.updateReminderList(newReminder);
       alert('new, id: ' + newReminder.id);
+    } else {
+      // update facade list
+      this.reminderFacade.editReminderList(this.reminders);
     }
 
-    // clear form
-    this.resetForm();
-  }
-
-  resetForm(): void {
-    this.reminder = new Reminder(null, '', '', null, '', '', '');
+    // clear current reminder. ToDo is there better way to do this
+    this.reminderFacade.updateCurrentReminder(null);
   }
 
   deleteReminder(reminder) {
@@ -65,7 +71,6 @@ export class ReminderListComponent {
 
   editReminder(reminder) {
     alert(reminder + ' ' + reminder.firstname);
-    this.reminder = reminder;
-    // set form values
+    this.reminderFacade.updateCurrentReminder(reminder);
   }
 }

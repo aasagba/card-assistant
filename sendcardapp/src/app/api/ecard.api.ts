@@ -19,7 +19,7 @@ export default {
 
       const configuration = {
         headers: {
-          'X-Mashape-Key': 'Q3QLmntkE8mshcxKQXKcYJaDiPtJp1usRH3jsnGxZE6c6nkxAW',
+          'X-Mashape-Key': '9P6O8TSzPPmshhPi8cYsebO7xPfap1yMwa6jsn7NLFjsRJWBNR',
           'Accept': 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded',
         }

@@ -1,4 +1,20 @@
-<div class="card card-block container">
-  <h4 class="card-title">Today's Birthdays</h4>
-  <p *ngFor="let r of reminders">{{r.firstname}}</p>
-</div>
+<section style="padding:25px;">
+  <h4>Upcoming</h4>
+  <div class="card card-block container">
+    <h4 class="card-title">This Week</h4>
+    <div style="background-color: darkgrey; width:40px;height:40px;display: inline-block; margin-right:10px;"></div>
+    <div style="display: inline-block">
+      <div style="display:block" *ngFor="let r of reminders">{{r.dob}}</div>
+      <div style="display:block" *ngFor="let r of reminders">{{r.firstname}} {{r.surname}}</div>
+    </div>
+  </div>
+
+  <div class="card card-block container">
+    <h4 class="card-title">Next Week</h4>
+    <div style="background-color: darkgrey; width:40px;height:40px;display: inline-block; margin-right:10px;"></div>
+    <div style="display: inline-block">
+      <div style="display:block" *ngFor="let r of reminders">{{r.dob}}</div>
+      <div style="display:block" *ngFor="let r of reminders">{{r.firstname}} {{r.surname}}</div>
+    </div>
+  </div>
+</section>

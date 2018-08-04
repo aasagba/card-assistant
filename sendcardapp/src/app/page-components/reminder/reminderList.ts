@@ -6,14 +6,32 @@ import { ReminderFacade } from '../reminder/current-reminder.facade';
 @Component({
   selector: 'reminder-list',
   template: `
-    <button 
-      (click)="toggleModal()"
-      class="btn btn-primary btn-icon" 
-      style="margin-right: 12px">
-        <clr-icon shape="plus"></clr-icon>
-      Add Reminder
-    </button>
     
+    <div class="content-container">
+    <div class="content-area">
+
+    <section class="title">
+      <h2 class="welcome">Good Evening, Kelly</h2>
+      <h5 class="hint" style="color: #0095D3;margin-top: 0.5rem;">Summer is in full swing!</h5>
+    </section>
+
+    <div class="row">
+      <div class="col-xs-3 offset-xs-4" style="text-align: center;">
+        <button
+          (click)="toggleModal()"
+          class="btn btn-primary btn-icon">
+          <clr-icon shape="plus"></clr-icon>
+          Add Reminder
+        </button>
+      </div>
+    </div>
+      
+      <div class="row">
+        <div class="col-xs-12">
+            <h4>My Reminders</h4>
+        </div>
+      </div>
+      
     <clr-modal 
       [(clrModalOpen)]="modalOpen" 
       [clrModalClosable]="false" 
@@ -30,8 +48,6 @@ import { ReminderFacade } from '../reminder/current-reminder.facade';
       
     </clr-modal>
     
-    <birthdays></birthdays>
-    
     <reminder 
       *ngFor="let j of reminders" 
       [reminder]="j" 
@@ -39,6 +55,15 @@ import { ReminderFacade } from '../reminder/current-reminder.facade';
       (reminderEdited)="editReminder($event)" 
       [toggleModal]="toggleModalFunc">
     </reminder>
+      
+    </div>
+      
+    <nav class="sidenav">
+      <section class="sidenav-content">
+        <birthdays></birthdays>
+      </section>
+    </nav>
+    </div>
   `,
 })
 export class ReminderListComponent implements OnInit {

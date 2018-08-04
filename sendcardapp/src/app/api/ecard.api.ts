@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const BASE_URL ='https://arik-e-cards.p.mashape.com/';
+// const BASE_URL ='https://arik-e-cards.p.mashape.com/';
+const BASE_URL ='https://api.emailjs.com/api/v1.0/email/send';
 
-export interface ecardAPIRequest {
-  cardTemplateId: number;
+export interface messageDetails {
   from: string;
   fromAddress: string;
   message: string;
@@ -12,20 +12,34 @@ export interface ecardAPIRequest {
   toAddress: string;
 }
 
+export interface ecardAPIRequest {
+  service_id: string;
+  template_id: string;
+  user_id: string;
+  template_params: messageDetails;
+}
+
 export default {
 
   endpoints: {
-    sendEcard: async (requestBody: ecardAPIRequest) => {
+    sendEcard: async (requestBody: messageDetails) => {
 
-      const configuration = {
-        headers: {
-          'X-Mashape-Key': '9P6O8TSzPPmshhPi8cYsebO7xPfap1yMwa6jsn7NLFjsRJWBNR',
-          'Accept': 'application/json',
-          'Content-Type': 'application/x-www-form-urlencoded',
+      const data: ecardAPIRequest = {
+        service_id: 'gmail',
+        template_id: 'template_dBuDl7KX',
+        user_id: 'user_trqxrfrmltOA3ESCqzNKM',
+        template_params: {
+          ...requestBody
         }
       };
 
-      return axios.post(`${BASE_URL}`, requestBody, configuration)
+      const configuration = {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      };
+
+      return axios.post(`${BASE_URL}`, data, configuration)
         .then(response => response);
     }
   },

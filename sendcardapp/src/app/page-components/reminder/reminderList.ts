@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 import { Reminder } from './reminder.component';
 import { ReminderInt } from '../reminderInt';
 import { ReminderFacade } from '../reminder/current-reminder.facade';
@@ -6,14 +6,45 @@ import { ReminderFacade } from '../reminder/current-reminder.facade';
 @Component({
   selector: 'reminder-list',
   template: `
-<reminder-form (reminderCreated)="addReminder($event)"></reminder-form>
-<birthdays></birthdays>
-<reminder *ngFor="let j of reminders" [reminder]="j" (reminderDeleted)="deleteReminder($event)" (reminderEdited)="editReminder($event)"></reminder>
+    <button 
+      (click)="toggleModal()"
+      class="btn btn-primary btn-icon" 
+      style="margin-right: 12px">
+        <clr-icon shape="plus"></clr-icon>
+      Add Reminder
+    </button>
+    
+    <clr-modal 
+      [(clrModalOpen)]="modalOpen" 
+      [clrModalClosable]="false" 
+      [clrModalStaticBackdrop]="false">
+      
+      <h3 class="modal-title">Add New Reminder</h3>
+      
+      <div class="modal-body">
+        <reminder-form 
+          (reminderCreated)="addReminder($event)"
+          [toggleModal]="toggleModalFunc">
+        </reminder-form>
+      </div>
+      
+    </clr-modal>
+    
+    <birthdays></birthdays>
+    
+    <reminder 
+      *ngFor="let j of reminders" 
+      [reminder]="j" 
+      (reminderDeleted)="deleteReminder($event)" 
+      (reminderEdited)="editReminder($event)" 
+      [toggleModal]="toggleModalFunc">
+    </reminder>
   `,
 })
 export class ReminderListComponent implements OnInit {
   reminders: ReminderInt[];
   reminder: Reminder;
+  modalOpen = false;
 
   constructor(
     private reminderFacade: ReminderFacade
@@ -24,6 +55,14 @@ export class ReminderListComponent implements OnInit {
     this.reminderFacade.getReminderList().subscribe((users: Array<Reminder>) => {
       this.reminders = users;
     });
+  }
+
+  toggleModal(): void {
+    this.modalOpen = !this.modalOpen;
+  }
+
+  get toggleModalFunc() {
+    return this.toggleModal.bind(this);
   }
 
   addReminder(newReminder): void {

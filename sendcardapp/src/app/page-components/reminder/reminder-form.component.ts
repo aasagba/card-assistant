@@ -9,7 +9,6 @@ import { ReminderFacade } from '../reminder/current-reminder.facade';
     <div class="card-text">
     <form class="form" [formGroup]="addReminderForm" (ngSubmit)="onSubmit(addReminderForm)">
       <section class="form-block">
-        <h4 class="card-title">Create Reminder</h4>
         <div class="form-group">
           <label for="empFullName" class="required">Firstname</label>
           <label for="firstname"
@@ -129,6 +128,7 @@ import { ReminderFacade } from '../reminder/current-reminder.facade';
   `,
 })
 export class ReminderFormComponent implements OnInit {
+  @Input() toggleModal: Function;
   @Output() reminderCreated = new EventEmitter<Reminder>();
   public user: Reminder;
   addReminderForm: FormGroup;
@@ -204,6 +204,7 @@ export class ReminderFormComponent implements OnInit {
       new Reminder(id, firstname, surname, dob, email, greeting, gender),
     );
 
+    this.toggleModal();
     this.addReminderForm.reset();
   }
 }

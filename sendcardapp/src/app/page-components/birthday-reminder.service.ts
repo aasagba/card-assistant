@@ -35,7 +35,9 @@ export class BirthdayReminderService {
     return rightNow.toISOString().slice(0,10).replace(/-/g,"/");
   }
 
-  private async sendECard(contact: ReminderInt) {
+  // ecard service code if need later
+
+/*  private async sendECard(contact: ReminderInt) {
     try {
       await this.handleSuccessResponse(contact);
 
@@ -62,5 +64,5 @@ export class BirthdayReminderService {
     const toAddress: string = contact.email;
 
     return await ECardApi.endpoints.sendEcard({ cardTemplateId, from, fromAddress, message, subject, to, toAddress });
-  }
+  }*/
 }

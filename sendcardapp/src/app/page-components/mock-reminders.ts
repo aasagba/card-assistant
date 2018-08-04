@@ -91,6 +91,15 @@ let Reminders: ReminderInt[] = [
     greeting: 'Happy Birthday!',
     gender: 'Male',
   },
+  {
+    id: 11,
+    firstname: 'Kelly',
+    surname: 'Asagba',
+    dob: '07/14/1986',
+    email: 'kelly.asagba@gmail.com',
+    greeting: 'Happy Birthday!',
+    gender: 'Female',
+  },
 ];
 
 export default Reminders;

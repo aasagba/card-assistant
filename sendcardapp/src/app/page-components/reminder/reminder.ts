@@ -14,8 +14,8 @@ import { Reminder } from './reminder.component';
       <span class="col-sm-2">{{data.dob | date :  "dd MMM"}} </span>
     	<span class="col-sm-6">{{data.firstname}} {{data.surname}}</span>
     	<span class="col-sm-4 row-controls">
-      	<a (click)="editItem()" class="btn btn-warning">Edit</a>
-        <a (click)="deleteItem()" class="btn btn-danger">Delete</a>
+        <button (click)="editItem()" class="btn btn-primary btn-icon"><clr-icon shape=""></clr-icon> Edit </button>
+        <button (click)="deleteItem()" class="btn btn-danger btn-icon"><clr-icon shape="trash"></clr-icon> Delete </button>
       </span>
     
   </div>
@@ -24,6 +24,7 @@ import { Reminder } from './reminder.component';
 })
 export class ReminderComponent {
   @Input('reminder') data: Reminder;
+  @Input() toggleModal: Function;
   @Output() reminderDeleted = new EventEmitter<Reminder>();
   @Output() reminderEdited = new EventEmitter<Reminder>();
 
@@ -33,5 +34,6 @@ export class ReminderComponent {
 
   editItem() {
     this.reminderEdited.emit(this.data);
+    this.toggleModal();
   }
 }

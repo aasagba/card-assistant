@@ -26,7 +26,8 @@ export class BirthdaysComponent implements OnInit {
         .filterBirthdayContacts(reminders);
         console.log('birthday component reminder: ', this.reminders);
 
-        this.reminders.forEach(reminder => this.sendECard(reminder));
+        // send ecard for birthdays today
+        // this.reminders.forEach(reminder => this.sendECard(reminder));
       });
   }
 
@@ -48,7 +49,6 @@ export class BirthdaysComponent implements OnInit {
   }
 
   private async postECard(contact: ReminderInt) {
-    const cardTemplateId: number = 3309;
     const from: string = `Adrian Asagba`;
     const fromAddress: string = `aasagba@gmail.com`;
     const message: string = contact.greeting;
@@ -56,7 +56,7 @@ export class BirthdaysComponent implements OnInit {
     const to: string = `${contact.firstname} ${contact.surname}`;
     const toAddress: string = contact.email;
 
-    return await ECardApi.endpoints.sendEcard({ cardTemplateId, from, fromAddress, message, subject, to, toAddress });
+    return await ECardApi.endpoints.sendEcard({ from, fromAddress, message, subject, to, toAddress });
   }
 
 }

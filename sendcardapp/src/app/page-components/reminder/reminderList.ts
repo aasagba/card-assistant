@@ -1,35 +1,80 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 import { Reminder } from './reminder.component';
-import Reminders from '../mock-reminders';
 import { ReminderInt } from '../reminderInt';
-import { BirthdaysComponent } from "../birthdays/birthdays.component";
+import { ReminderFacade } from '../reminder/current-reminder.facade';
 
 @Component({
   selector: 'reminder-list',
   template: `
-<reminder-form (reminderCreated)="addReminder($event)" [reminder]="reminder"></reminder-form>
-<birthdays></birthdays>
-<reminder *ngFor="let j of reminders" [reminder]="j" (reminderDeleted)="deleteReminder($event)" (reminderEdited)="editReminder($event)"></reminder>
+    <button 
+      (click)="toggleModal()"
+      class="btn btn-primary btn-icon" 
+      style="margin-right: 12px">
+        <clr-icon shape="plus"></clr-icon>
+      Add Reminder
+    </button>
+    
+    <clr-modal 
+      [(clrModalOpen)]="modalOpen" 
+      [clrModalClosable]="false" 
+      [clrModalStaticBackdrop]="false">
+      
+      <h3 class="modal-title">Add New Reminder</h3>
+      
+      <div class="modal-body">
+        <reminder-form 
+          (reminderCreated)="addReminder($event)"
+          [toggleModal]="toggleModalFunc">
+        </reminder-form>
+      </div>
+      
+    </clr-modal>
+    
+    <birthdays></birthdays>
+    
+    <reminder 
+      *ngFor="let j of reminders" 
+      [reminder]="j" 
+      (reminderDeleted)="deleteReminder($event)" 
+      (reminderEdited)="editReminder($event)" 
+      [toggleModal]="toggleModalFunc">
+    </reminder>
   `,
 })
-export class ReminderListComponent {
+export class ReminderListComponent implements OnInit {
   reminders: ReminderInt[];
   reminder: Reminder;
+  modalOpen = false;
 
-  constructor() {
-    this.resetForm();
-  }
+  constructor(
+    private reminderFacade: ReminderFacade
+  ) {}
 
   ngOnInit(): void {
-    this.reminders = Reminders;
+    // this.reminders = this.reminderFacade.getReminderList();
+    this.reminderFacade.getReminderList().subscribe((users: Array<Reminder>) => {
+      this.reminders = users;
+    });
+  }
+
+  toggleModal(): void {
+    this.modalOpen = !this.modalOpen;
+  }
+
+  get toggleModalFunc() {
+    return this.toggleModal.bind(this);
   }
 
   addReminder(newReminder): void {
     // if existing edit
     let isNew = true;
-    console.log('addReminder: ', newReminder.firstname);
+    let remindersList: Reminder[] = this.reminders;
 
-    this.reminders = this.reminders.map((reminder) => {
+    console.log('addReminder: ', newReminder);
+    console.log("facade remindersList: ", remindersList.length);
+    console.log(remindersList);
+
+    this.reminders = remindersList.map((reminder) => {
       if (reminder.id === newReminder.id) {
         alert('Edit: ' + newReminder.id);
         isNew = false;
@@ -44,16 +89,16 @@ export class ReminderListComponent {
 
     if (isNew) {
       // if new add
-      this.reminders.unshift(newReminder);
+      // this.reminders.unshift(newReminder);
+      this.reminderFacade.updateReminderList(newReminder);
       alert('new, id: ' + newReminder.id);
+    } else {
+      // update facade list
+      this.reminderFacade.editReminderList(this.reminders);
     }
 
-    // clear form
-    this.resetForm();
-  }
-
-  resetForm(): void {
-    this.reminder = new Reminder(null, '', '', null, '', '', '');
+    // clear current reminder. ToDo is there better way to do this
+    this.reminderFacade.updateCurrentReminder(null);
   }
 
   deleteReminder(reminder) {
@@ -65,7 +110,6 @@ export class ReminderListComponent {
 
   editReminder(reminder) {
     alert(reminder + ' ' + reminder.firstname);
-    this.reminder = reminder;
-    // set form values
+    this.reminderFacade.updateCurrentReminder(reminder);
   }
 }

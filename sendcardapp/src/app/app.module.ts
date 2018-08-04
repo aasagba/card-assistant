@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
+import { ReminderFacade } from './page-components/reminder/current-reminder.facade';
 // import { Reminder } from './page-components/reminder/reminder.component';
 import { ContactComponent } from './page-components/contact/contact.component';
 import { DashboardComponent } from './page-components/dashboard.component';
@@ -36,7 +37,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   imports: [BrowserModule, NgbModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, ClarityModule, BrowserAnimationsModule],
   exports: [ReactiveFormsModule],
-  providers: [BirthdayReminderService],
+  providers: [
+    BirthdayReminderService,
+    ReminderFacade
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

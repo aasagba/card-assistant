@@ -23,6 +23,7 @@ import { BirthdaysComponent } from "./page-components/birthdays/birthdays.compon
 import { AppRoutingModule } from './app.routing.module';
 import { ClarityModule } from '@clr/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {DatepickerModule} from "./shared-components/datepicker/datepicker.module";
 
 @NgModule({
   declarations: [
@@ -35,8 +36,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReminderListComponent,
     BirthdaysComponent,
   ],
-  imports: [BrowserModule, NgbModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, ClarityModule, BrowserAnimationsModule],
-  exports: [ReactiveFormsModule],
+  imports: [BrowserModule, NgbModule.forRoot(), AppRoutingModule, FormsModule, ReactiveFormsModule, ClarityModule, BrowserAnimationsModule, DatepickerModule],
+  exports: [ReactiveFormsModule, DatepickerModule],
   providers: [
     BirthdayReminderService,
     ReminderFacade

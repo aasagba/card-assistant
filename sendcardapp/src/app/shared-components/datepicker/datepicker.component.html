@@ -1,0 +1,30 @@
+<form class="form" [formGroup]="dateForm" novalidate>
+  <section class="form-block">
+    <div class="form-group">
+      <label [for]="labelId" *ngIf="label" class="field-label">{{ label }}</label>
+      <label
+        [for]="labelId"
+        [ngClass]="{'nodatelabel': !label}"
+        aria-haspopup="true"
+        role="tooltip"
+        class="date-input"
+        [class.invalid]="isInvalid('date') || transcludedValidationErrors" (click)="false">
+        <input
+          [class.invalid-field]="isInvalid('date') || transcludedValidationErrors"
+          [id]="labelId"
+          [name]="labelId"
+          type="date"
+          clrDate
+          formControlName="date"
+          [(clrDate)]="date"
+          required
+        />
+        <span class="tooltip-content">
+            <span *ngIf="dateForm.get('date').errors && dateForm.get('date').errors.required">{{ 'error' }}</span>
+            <span *ngIf="dateForm.get('date').errors && dateForm.get('date').errors.isValidDate === false">{{ 'is_valid_date' }}</span>
+            <ng-content></ng-content>
+        </span>
+      </label>
+    </div>
+  </section>
+</form>
